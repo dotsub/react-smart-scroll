@@ -6,6 +6,11 @@ ReactSmartScroll is a lightweight, high-performance, easy-to-use way to render l
 
 ReactSmartScroll is (mostly) un-opinionated, with minimum configuration. It has automatic support for variable height rows, even if they change height at runtime due to resizing, expanding, etc.
 
+This project is forked from https://github.com/stevensacks/react-smart-scroll project. 
+Reason is to support special needs to re-render smart scroll component without change of scroll position,
+but also keeping the option also force scroll position change when needed.
+This is useful if we need to update content of elements while keeping its scroll position.
+
 ### Installation
 ```
 // npm
