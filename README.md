@@ -1,4 +1,6 @@
-# react-smart-scroll
+# @dotsub/react-smart-scroll
+
+[![npm version](https://badge.fury.io/js/%40dotsub%2Freact-smart-scroll.svg)](https://badge.fury.io/js/%40dotsub%2Freact-smart-scroll)
 
 ReactSmartScroll is a lightweight, high-performance, easy-to-use way to render long lists efficiently in React. It only renders the visible rows, with a few buffer rows above and below.
 
@@ -7,10 +9,10 @@ ReactSmartScroll is (mostly) un-opinionated, with minimum configuration. It has 
 ### Installation
 ```
 // npm
-npm i -S react-smart-scroll
+npm i -S @dotsub/react-smart-scroll
 
 // yarn
-yarn add react-smart-scroll
+yarn add @dotsub/react-smart-scroll
 ```
 
 ### Super Simple Sample:
