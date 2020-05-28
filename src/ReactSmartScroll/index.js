@@ -11,7 +11,6 @@ import PropTypes from 'prop-types';
 import ReactSmartScrollRow from './ReactSmartScrollRow';
 import useComponentRect from '../hooks/useComponentRect';
 import useScroll from '../hooks/useScroll';
-import useScrollToTop from '../hooks/useScrollToTop';
 
 const ReactSmartScroll = props => {
     const {
@@ -59,7 +58,6 @@ const ReactSmartScroll = props => {
     const scrollRef = useRef(undefined);
     const scroll = useScroll(scrollRef);
     const visible = useComponentRect(scrollRef);
-    useScrollToTop(data, scrollRef);
 
     // useEffect with this has considerable redraw lag
     useLayoutEffect(() => {
@@ -101,7 +99,7 @@ const ReactSmartScroll = props => {
                 scrollRef.current.scrollTop = paddingTop;
                 setTimeout(() => {
                     setStart(startAt);
-                    if (data[startAt]) {
+                    if (data[startAt] && refs[startAt]) {
                         const el = refs[startAt].current;
                         if (el) el.scrollIntoView();
                     }
@@ -152,7 +150,6 @@ ReactSmartScroll.defaultProps = {
     overflow: 'auto',
     row: () => null,
     rowHeight: 100,
-    startAt: 0,
     style: {},
 };
 
