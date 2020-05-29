@@ -1,9 +1,9 @@
-import {act} from 'react-dom/test-utils';
-import {JSDOM} from 'jsdom';
 import {mount} from 'enzyme';
+import {JSDOM} from 'jsdom';
 import PropTypes from 'prop-types';
 import React from 'react';
-import ReactSmartScroll from './index';
+import {act} from 'react-dom/test-utils';
+import ReactSmartScroll, {ReactSmartScrollNotMemoized} from './index';
 
 new JSDOM(
     '<!doctype html><html lang="en"><body><div id="root"/></body></html>'
@@ -87,5 +87,23 @@ describe('ReactSmartScroll', () => {
 
         // THEN
         expect(actualNode.html()).toEqual(expectedNode.html());
+    });
+
+    it('does not configure default value for startAt property', () => {
+        // WHEN
+        const actualNode = mount(
+            <ReactSmartScrollNotMemoized
+                className="sbte-smart-scroll"
+                data={[{name: 'row1'}, {name: 'row2'}]}
+                onClick={() => {}}
+                row={TestRow}
+                rowHeight={50}
+                rowProps={null}
+            />
+        );
+        actualNode.setProps({});
+
+        // THEN
+        expect(actualNode.props().startAt).not.toEqual(0);
     });
 });

@@ -12,7 +12,9 @@ import ReactSmartScrollRow from './ReactSmartScrollRow';
 import useComponentRect from '../hooks/useComponentRect';
 import useScroll from '../hooks/useScroll';
 
-const ReactSmartScroll = props => {
+// Trick with non-default export of non-memoized component is needed for default props testing:
+// https://github.com/enzymejs/enzyme/issues/2115
+export const ReactSmartScrollNotMemoized = props => {
     const {
         className,
         data,
@@ -134,7 +136,7 @@ const ReactSmartScroll = props => {
     );
 };
 
-ReactSmartScroll.propTypes = {
+ReactSmartScrollNotMemoized.propTypes = {
     className: PropTypes.string,
     data: PropTypes.array,
     overflow: PropTypes.string,
@@ -144,7 +146,7 @@ ReactSmartScroll.propTypes = {
     style: PropTypes.object,
 };
 
-ReactSmartScroll.defaultProps = {
+ReactSmartScrollNotMemoized.defaultProps = {
     className: '',
     data: [],
     overflow: 'auto',
@@ -153,4 +155,4 @@ ReactSmartScroll.defaultProps = {
     style: {},
 };
 
-export default React.memo(ReactSmartScroll);
+export default React.memo(ReactSmartScrollNotMemoized);
