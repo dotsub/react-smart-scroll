@@ -20,9 +20,8 @@
     "clean": "nwb clean-module && nwb clean-demo",
     "prepublishOnly": "npm run build",
     "start": "nwb serve-react-demo",
-    "test": "nwb test-react",
-    "test:coverage": "nwb test-react --coverage",
-    "test:watch": "nwb test-react --server",
+    "test:watch": "jest --watch --no-cache",
+    "test": "jest --coverage",
     "lint": "eslint --ext .js --ext .jsx src/ -o build/eslint.xml -f checkstyle || true",
     "lintfix": "eslint --fix --ext .js --ext .jsx src/"
   },
@@ -44,12 +43,17 @@
       "git add"
     ]
   },
-  "dependencies": {},
   "peerDependencies": {
     "react": "^16.13.1"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.10.1",
+    "@babel/preset-react": "^7.10.1",
+    "babel": "^6.23.0",
     "babel-eslint": "^10.1.0",
+    "babel-jest": "^26.0.1",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.2",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.10.1",
     "eslint-config-react-app": "^5.2.1",
@@ -60,6 +64,8 @@
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^3.0.0",
     "husky": "^4.2.3",
+    "jest": "^26.0.1",
+    "jsdom": "^16.2.2",
     "lint-staged": "^10.1.2",
     "nwb": "0.24.x",
     "prettier": "^2.0.4",
