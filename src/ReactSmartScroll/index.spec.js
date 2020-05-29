@@ -106,4 +106,52 @@ describe('ReactSmartScroll', () => {
         // THEN
         expect(actualNode.props().startAt).not.toEqual(0);
     });
+
+    it('does not scroll when startAt is undefined', done => {
+        // GIVEN
+        const expectedNode = mount(
+            <div className="sbte-smart-scroll" style={{overflow: 'auto'}}>
+                <div style={{paddingBottom: '0px', paddingTop: '200px'}}>
+                    <div>
+                        <div>{'{"name":"row5"}'}</div>
+                        <div>4</div>
+                        <div>null</div>
+                    </div>
+                    <div>
+                        <div>{'{"name":"row6"}'}</div>
+                        <div>5</div>
+                        <div>null</div>
+                    </div>
+                </div>
+            </div>
+        );
+        const actualNode = mount(
+            <ReactSmartScroll
+                className="sbte-smart-scroll"
+                data={[
+                    {name: 'row1'},
+                    {name: 'row2'},
+                    {name: 'row3'},
+                    {name: 'row4'},
+                    {name: 'row5'},
+                    {name: 'row6'},
+                ]}
+                onClick={() => {}}
+                row={TestRow}
+                rowHeight={50}
+                rowProps={null}
+                startAt={4}
+            />
+        );
+        simulateEnoughSpaceForCues(actualNode);
+
+        // WHEN
+        actualNode.setProps({startAt: undefined});
+
+        setTimeout(() => {
+            // THEN
+            expect(actualNode.html()).toEqual(expectedNode.html());
+            done();
+        }, 10);
+    });
 });

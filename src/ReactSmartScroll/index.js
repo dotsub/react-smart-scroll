@@ -64,23 +64,34 @@ export const ReactSmartScrollNotMemoized = props => {
     // useEffect with this has considerable redraw lag
     useLayoutEffect(() => {
         if (visible.height) {
-            const startIndex =
-                start !== startAt
-                    ? startAt
-                    : calcStartIndex(actualHeights, scroll.top);
-            const endIndex = calcEndIndex(
+            // const startIndex = calcStartIndex(actualHeights, scroll.top);
+            // const endIndex = calcEndIndex(
+            //     actualHeights,
+            //     visible.height,
+            //     startIndex
+            // );
+            // const startContingency =
+            //     startAt && startAt < 2 && startAt < start ? startAt : 2;
+
+            // &&
+            // (startAt < startIndex + startContingency ||
+            //     startAt > endIndex - 2)
+            const scrollStartIndex = startAt !== undefined ? startAt : start;
+            const scrollEndIndex = calcEndIndex(
                 actualHeights,
                 visible.height,
-                startIndex
+                scrollStartIndex
             );
 
             const last = actualHeights.length - 1;
 
             const paddingTop =
-                startIndex > 0 ? sumRange(actualHeights, 0, startIndex - 1) : 0;
+                scrollStartIndex > 0
+                    ? sumRange(actualHeights, 0, scrollStartIndex - 1)
+                    : 0;
             const paddingBottom =
-                endIndex !== last
-                    ? sumRange(actualHeights, endIndex + 1, last) + 17
+                scrollEndIndex !== last
+                    ? sumRange(actualHeights, scrollEndIndex + 1, last) + 17
                     : 0;
 
             const contentHeight = sumRange(
@@ -90,20 +101,26 @@ export const ReactSmartScrollNotMemoized = props => {
             );
 
             const measurements = {
-                startIndex,
-                endIndex,
+                startIndex: scrollStartIndex,
+                endIndex: scrollEndIndex,
                 paddingBottom,
                 paddingTop,
                 contentHeight,
             };
             setMeasurements(measurements);
-            if (start !== startAt) {
+            // &&
+            // (startAt < startIndex + startContingency ||
+            //     startAt > endIndex - 2)
+            if (startAt !== undefined) {
                 scrollRef.current.scrollTop = paddingTop;
                 setTimeout(() => {
                     setStart(startAt);
                     if (data[startAt] && refs[startAt]) {
                         const el = refs[startAt].current;
-                        if (el) el.scrollIntoView();
+                        if (el) {
+                            el.parentNode.scrollTop =
+                                el.offsetTop - el.parentNode.offsetTop;
+                        }
                     }
                 }, 0);
             }
