@@ -21,7 +21,7 @@
     "prepublishOnly": "npm run build",
     "start": "nwb serve-react-demo",
     "test:watch": "jest --watch --no-cache",
-    "test": "jest --coverage",
+    "test": "jest --coverage --collectCoverage",
     "lint": "eslint --ext .js --ext .jsx src/ -o build/eslint.xml -f checkstyle || true",
     "lintfix": "eslint --fix --ext .js --ext .jsx src/"
   },
