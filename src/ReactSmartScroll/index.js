@@ -12,6 +12,9 @@ import ReactSmartScrollRow from './ReactSmartScrollRow';
 import useComponentRect from '../hooks/useComponentRect';
 import useScroll from '../hooks/useScroll';
 
+const isNotInViewPort = (startAt, startIndex, endIndex, startContingency) =>
+    startAt < startIndex + startContingency || startAt > endIndex - 2;
+
 // Trick with non-default export of non-memoized component is needed for default props testing:
 // https://github.com/enzymejs/enzyme/issues/2115
 export const ReactSmartScrollNotMemoized = props => {
@@ -64,19 +67,20 @@ export const ReactSmartScrollNotMemoized = props => {
     // useEffect with this has considerable redraw lag
     useLayoutEffect(() => {
         if (visible.height) {
-            // const startIndex = calcStartIndex(actualHeights, scroll.top);
-            // const endIndex = calcEndIndex(
-            //     actualHeights,
-            //     visible.height,
-            //     startIndex
-            // );
-            // const startContingency =
-            //     startAt && startAt < 2 && startAt < start ? startAt : 2;
+            const startIndex = calcStartIndex(actualHeights, scroll.top);
+            const endIndex = calcEndIndex(
+                actualHeights,
+                visible.height,
+                startIndex
+            );
+            const startContingency =
+                startAt && startAt < 2 && startAt < start ? startAt : 2;
 
-            // &&
-            // (startAt < startIndex + startContingency ||
-            //     startAt > endIndex - 2)
-            const scrollStartIndex = startAt !== undefined ? startAt : start;
+            const scrollStartIndex =
+                startAt !== undefined &&
+                isNotInViewPort(startAt, startIndex, endIndex, startContingency)
+                    ? startAt
+                    : start;
             const scrollEndIndex = calcEndIndex(
                 actualHeights,
                 visible.height,
@@ -108,10 +112,10 @@ export const ReactSmartScrollNotMemoized = props => {
                 contentHeight,
             };
             setMeasurements(measurements);
-            // &&
-            // (startAt < startIndex + startContingency ||
-            //     startAt > endIndex - 2)
-            if (startAt !== undefined) {
+            if (
+                startAt !== undefined &&
+                isNotInViewPort(startAt, startIndex, endIndex, startContingency)
+            ) {
                 scrollRef.current.scrollTop = paddingTop;
                 setTimeout(() => {
                     setStart(startAt);

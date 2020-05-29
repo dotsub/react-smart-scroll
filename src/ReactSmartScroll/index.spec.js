@@ -9,7 +9,7 @@ new JSDOM(
     '<!doctype html><html lang="en"><body><div id="root"/></body></html>'
 );
 
-const simulateEnoughSpaceForCues = actualNode =>
+const simulateEnoughSpaceForCues = (actualNode, viewPortSize = 100) =>
     act(() => {
         // Simulate enough space in viewport
         // @ts-ignore
@@ -17,12 +17,12 @@ const simulateEnoughSpaceForCues = actualNode =>
             .find('.sbte-smart-scroll')
             .at(1)
             .getDOMNode().getBoundingClientRect = jest.fn(() => ({
-            bottom: 500,
-            height: 500,
+            bottom: viewPortSize,
+            height: viewPortSize,
             left: 0,
-            right: 500,
+            right: viewPortSize,
             top: 0,
-            width: 500,
+            width: viewPortSize,
         }));
         window.dispatchEvent(new Event('resize')); // trigger smart scroll space re-calculation
     });
@@ -147,6 +147,226 @@ describe('ReactSmartScroll', () => {
 
         // WHEN
         actualNode.setProps({startAt: undefined});
+
+        setTimeout(() => {
+            // THEN
+            expect(actualNode.html()).toEqual(expectedNode.html());
+            done();
+        }, 10);
+    });
+
+    it('scrolls when startAt is changed to value above view port', done => {
+        // GIVEN
+        const expectedNode = mount(
+            <div className="sbte-smart-scroll" style={{overflow: 'auto'}}>
+                <div style={{paddingBottom: '367px', paddingTop: '50px'}}>
+                    <div>
+                        <div>{'{"name":"row2"}'}</div>
+                        <div>1</div>
+                        <div>null</div>
+                    </div>
+                    <div>
+                        <div>{'{"name":"row3"}'}</div>
+                        <div>2</div>
+                        <div>null</div>
+                    </div>
+                    <div>
+                        <div>{'{"name":"row4"}'}</div>
+                        <div>3</div>
+                        <div>null</div>
+                    </div>
+                    <div>
+                        <div>{'{"name":"row5"}'}</div>
+                        <div>4</div>
+                        <div>null</div>
+                    </div>
+                    <div>
+                        <div>{'{"name":"row6"}'}</div>
+                        <div>5</div>
+                        <div>null</div>
+                    </div>
+                </div>
+            </div>
+        );
+        const actualNode = mount(
+            <ReactSmartScroll
+                className="sbte-smart-scroll"
+                data={[
+                    {name: 'row1'},
+                    {name: 'row2'},
+                    {name: 'row3'},
+                    {name: 'row4'},
+                    {name: 'row5'},
+                    {name: 'row6'},
+                    {name: 'row7'},
+                    {name: 'row8'},
+                    {name: 'row9'},
+                    {name: 'row10'},
+                    {name: 'row11'},
+                    {name: 'row12'},
+                    {name: 'row13'},
+                ]}
+                onClick={() => {}}
+                row={TestRow}
+                rowHeight={50}
+                rowProps={null}
+                startAt={4}
+            />
+        );
+        simulateEnoughSpaceForCues(actualNode);
+
+        // WHEN
+        actualNode.setProps({startAt: 1});
+
+        setTimeout(() => {
+            // THEN
+            expect(actualNode.html()).toEqual(expectedNode.html());
+            done();
+        }, 10);
+    });
+
+    it('scrolls when startAt changed to value below view port', done => {
+        // GIVEN
+        const expectedNode = mount(
+            <div className="sbte-smart-scroll" style={{overflow: 'auto'}}>
+                <div style={{paddingBottom: '0px', paddingTop: '400px'}}>
+                    <div>
+                        <div>{'{"name":"row9"}'}</div>
+                        <div>8</div>
+                        <div>null</div>
+                    </div>
+                    <div>
+                        <div>{'{"name":"row10"}'}</div>
+                        <div>9</div>
+                        <div>null</div>
+                    </div>
+                    <div>
+                        <div>{'{"name":"row11"}'}</div>
+                        <div>10</div>
+                        <div>null</div>
+                    </div>
+                    <div>
+                        <div>{'{"name":"row12"}'}</div>
+                        <div>11</div>
+                        <div>null</div>
+                    </div>
+                    <div>
+                        <div>{'{"name":"row13"}'}</div>
+                        <div>12</div>
+                        <div>null</div>
+                    </div>
+                </div>
+            </div>
+        );
+        const actualNode = mount(
+            <ReactSmartScroll
+                className="sbte-smart-scroll"
+                data={[
+                    {name: 'row1'},
+                    {name: 'row2'},
+                    {name: 'row3'},
+                    {name: 'row4'},
+                    {name: 'row5'},
+                    {name: 'row6'},
+                    {name: 'row7'},
+                    {name: 'row8'},
+                    {name: 'row9'},
+                    {name: 'row10'},
+                    {name: 'row11'},
+                    {name: 'row12'},
+                    {name: 'row13'},
+                ]}
+                onClick={() => {}}
+                row={TestRow}
+                rowHeight={50}
+                rowProps={null}
+                startAt={0}
+            />
+        );
+        simulateEnoughSpaceForCues(actualNode);
+
+        // WHEN
+        actualNode.setProps({startAt: 8});
+
+        setTimeout(() => {
+            // THEN
+            expect(actualNode.html()).toEqual(expectedNode.html());
+            done();
+        }, 10);
+    });
+
+    it('does not scroll when startAt is changed to value in view port', done => {
+        // GIVEN
+        const expectedNode = mount(
+            <div className="sbte-smart-scroll" style={{overflow: 'auto'}}>
+                <div style={{paddingBottom: '267px', paddingTop: '50px'}}>
+                    <div>
+                        <div>{'{"name":"row2"}'}</div>
+                        <div>1</div>
+                        <div>null</div>
+                    </div>
+                    <div>
+                        <div>{'{"name":"row3"}'}</div>
+                        <div>2</div>
+                        <div>null</div>
+                    </div>
+                    <div>
+                        <div>{'{"name":"row4"}'}</div>
+                        <div>3</div>
+                        <div>null</div>
+                    </div>
+                    <div>
+                        <div>{'{"name":"row5"}'}</div>
+                        <div>4</div>
+                        <div>null</div>
+                    </div>
+                    <div>
+                        <div>{'{"name":"row6"}'}</div>
+                        <div>5</div>
+                        <div>null</div>
+                    </div>
+                    <div>
+                        <div>{'{"name":"row7"}'}</div>
+                        <div>6</div>
+                        <div>null</div>
+                    </div>
+                    <div>
+                        <div>{'{"name":"row8"}'}</div>
+                        <div>7</div>
+                        <div>null</div>
+                    </div>
+                </div>
+            </div>
+        );
+        const actualNode = mount(
+            <ReactSmartScroll
+                className="sbte-smart-scroll"
+                data={[
+                    {name: 'row1'},
+                    {name: 'row2'},
+                    {name: 'row3'},
+                    {name: 'row4'},
+                    {name: 'row5'},
+                    {name: 'row6'},
+                    {name: 'row7'},
+                    {name: 'row8'},
+                    {name: 'row9'},
+                    {name: 'row10'},
+                    {name: 'row11'},
+                    {name: 'row12'},
+                    {name: 'row13'},
+                ]}
+                onClick={() => {}}
+                row={TestRow}
+                rowHeight={50}
+                rowProps={null}
+                startAt={1}
+            />
+        );
+        simulateEnoughSpaceForCues(actualNode, 200);
+
+        // WHEN
+        actualNode.setProps({startAt: 4});
 
         setTimeout(() => {
             // THEN
