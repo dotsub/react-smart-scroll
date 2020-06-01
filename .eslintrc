@@ -54,6 +54,7 @@
         "no-return-assign": ["error"],
         "no-shadow": 0,
         "no-unused-vars": ["warn"],
+        "no-unused-expressions": 0,
         "no-useless-escape": 0,
         "object-curly-spacing": ["error", "never"],
         "one-var": [
@@ -96,13 +97,7 @@
         "prefer-rest-params": ["error"],
         "prefer-template": ["error"],
         "rest-spread-spacing": ["error", "never"],
-        "sort-imports": [
-            "warn",
-            {
-                "ignoreCase": true,
-                "memberSyntaxSortOrder": ["multiple", "single", "all", "none"]
-            }
-        ],
+        "sort-imports": 0,
         "template-curly-spacing": ["error", "never"],
         "yield-star-spacing": ["error", "after"],
 

@@ -12,7 +12,12 @@ import ReactSmartScrollRow from './ReactSmartScrollRow';
 import useComponentRect from '../hooks/useComponentRect';
 import useScroll from '../hooks/useScroll';
 
-const ReactSmartScroll = props => {
+const isNotInViewPort = (startAt, startIndex, endIndex, startContingency) =>
+    startAt < startIndex + startContingency || startAt > endIndex - 2;
+
+// Trick with non-default export of non-memoized component is needed for default props testing:
+// https://github.com/enzymejs/enzyme/issues/2115
+export const ReactSmartScrollNotMemoized = props => {
     const {
         className,
         data,
@@ -62,23 +67,35 @@ const ReactSmartScroll = props => {
     // useEffect with this has considerable redraw lag
     useLayoutEffect(() => {
         if (visible.height) {
-            const startIndex =
-                start !== startAt
-                    ? startAt
-                    : calcStartIndex(actualHeights, scroll.top);
+            const startIndex = calcStartIndex(actualHeights, scroll.top);
             const endIndex = calcEndIndex(
                 actualHeights,
                 visible.height,
                 startIndex
             );
+            const startContingency =
+                startAt && startAt < 2 && startAt > start ? startAt : 2;
+
+            const scrollStartIndex =
+                startAt !== undefined &&
+                isNotInViewPort(startAt, startIndex, endIndex, startContingency)
+                    ? startAt
+                    : start;
+            const scrollEndIndex = calcEndIndex(
+                actualHeights,
+                visible.height,
+                scrollStartIndex
+            );
 
             const last = actualHeights.length - 1;
 
             const paddingTop =
-                startIndex > 0 ? sumRange(actualHeights, 0, startIndex - 1) : 0;
+                scrollStartIndex > 0
+                    ? sumRange(actualHeights, 0, scrollStartIndex - 1)
+                    : 0;
             const paddingBottom =
-                endIndex !== last
-                    ? sumRange(actualHeights, endIndex + 1, last) + 17
+                scrollEndIndex !== last
+                    ? sumRange(actualHeights, scrollEndIndex + 1, last) + 17
                     : 0;
 
             const contentHeight = sumRange(
@@ -88,20 +105,26 @@ const ReactSmartScroll = props => {
             );
 
             const measurements = {
-                startIndex,
-                endIndex,
+                startIndex: scrollStartIndex,
+                endIndex: scrollEndIndex,
                 paddingBottom,
                 paddingTop,
                 contentHeight,
             };
             setMeasurements(measurements);
-            if (start !== startAt) {
+            if (
+                startAt !== undefined &&
+                isNotInViewPort(startAt, startIndex, endIndex, startContingency)
+            ) {
                 scrollRef.current.scrollTop = paddingTop;
                 setTimeout(() => {
                     setStart(startAt);
                     if (data[startAt] && refs[startAt]) {
                         const el = refs[startAt].current;
-                        if (el) el.scrollIntoView();
+                        if (el) {
+                            el.parentNode.scrollTop =
+                                el.offsetTop - el.parentNode.offsetTop;
+                        }
                     }
                 }, 0);
             }
@@ -134,7 +157,7 @@ const ReactSmartScroll = props => {
     );
 };
 
-ReactSmartScroll.propTypes = {
+ReactSmartScrollNotMemoized.propTypes = {
     className: PropTypes.string,
     data: PropTypes.array,
     overflow: PropTypes.string,
@@ -144,7 +167,7 @@ ReactSmartScroll.propTypes = {
     style: PropTypes.object,
 };
 
-ReactSmartScroll.defaultProps = {
+ReactSmartScrollNotMemoized.defaultProps = {
     className: '',
     data: [],
     overflow: 'auto',
@@ -153,4 +176,4 @@ ReactSmartScroll.defaultProps = {
     style: {},
 };
 
-export default React.memo(ReactSmartScroll);
+export default React.memo(ReactSmartScrollNotMemoized);
