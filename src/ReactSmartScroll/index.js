@@ -74,7 +74,7 @@ export const ReactSmartScrollNotMemoized = props => {
                 startIndex
             );
             const startContingency =
-                startAt && startAt < 2 && startAt < start ? startAt : 2;
+                startAt && startAt < 2 && startAt > start ? startAt : 2;
 
             const scrollStartIndex =
                 startAt !== undefined &&
