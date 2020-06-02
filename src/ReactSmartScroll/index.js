@@ -12,8 +12,13 @@ import ReactSmartScrollRow from './ReactSmartScrollRow';
 import useComponentRect from '../hooks/useComponentRect';
 import useScroll from '../hooks/useScroll';
 
-const isNotInViewPort = (startAt, startIndex, endIndex, startContingency) =>
-    startAt < startIndex + startContingency || startAt > endIndex - 2;
+const isNotInViewPort = (startAt, startIndex, endIndex, startContingency) => {
+    const endContingency = startIndex === 0 ? 2 : 0;
+    return (
+        startAt < startIndex + startContingency ||
+        startAt > endIndex - 2 - endContingency
+    );
+};
 
 // Trick with non-default export of non-memoized component is needed for default props testing:
 // https://github.com/enzymejs/enzyme/issues/2115
