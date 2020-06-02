@@ -140,7 +140,7 @@ export const ReactSmartScrollNotMemoized = props => {
             style={{overflow, ...style}}
         >
             <div style={{paddingBottom, paddingTop}}>
-                {data.slice(startIndex, endIndex + 1).map((item, i) => (
+                {data.slice(startIndex, endIndex + 2).map((item, i) => (
                     <ReactSmartScrollRow
                         key={item.id || startIndex + i}
                         Component={row}
