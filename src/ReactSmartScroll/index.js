@@ -85,7 +85,7 @@ export const ReactSmartScrollNotMemoized = props => {
                 startAt !== undefined &&
                 isNotInViewPort(startAt, startIndex, endIndex, startContingency)
                     ? startAt
-                    : start;
+                    : startIndex;
             const scrollEndIndex = calcEndIndex(
                 actualHeights,
                 visible.height,

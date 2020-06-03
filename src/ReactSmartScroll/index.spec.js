@@ -111,7 +111,17 @@ describe('ReactSmartScroll', () => {
         // GIVEN
         const expectedNode = mount(
             <div className="sbte-smart-scroll" style={{overflow: 'auto'}}>
-                <div style={{paddingBottom: '0px', paddingTop: '400px'}}>
+                <div style={{paddingBottom: '117px', paddingTop: '300px'}}>
+                    <div>
+                        <div>{'{"name":"row7"}'}</div>
+                        <div>6</div>
+                        <div>null</div>
+                    </div>
+                    <div>
+                        <div>{'{"name":"row8"}'}</div>
+                        <div>7</div>
+                        <div>null</div>
+                    </div>
                     <div>
                         <div>{'{"name":"row9"}'}</div>
                         <div>8</div>
@@ -130,11 +140,6 @@ describe('ReactSmartScroll', () => {
                     <div>
                         <div>{'{"name":"row12"}'}</div>
                         <div>11</div>
-                        <div>null</div>
-                    </div>
-                    <div>
-                        <div>{'{"name":"row13"}'}</div>
-                        <div>12</div>
                         <div>null</div>
                     </div>
                 </div>
@@ -166,6 +171,7 @@ describe('ReactSmartScroll', () => {
             />
         );
         simulateEnoughSpaceForCues(actualNode);
+        actualNode.getDOMNode().dispatchEvent(new Event('scroll'));
 
         // WHEN
         actualNode.setProps({startAt: undefined});
@@ -326,7 +332,17 @@ describe('ReactSmartScroll', () => {
         // GIVEN
         const expectedNode = mount(
             <div className="sbte-smart-scroll" style={{overflow: 'auto'}}>
-                <div style={{paddingBottom: '167px', paddingTop: '150px'}}>
+                <div style={{paddingBottom: '267px', paddingTop: '50px'}}>
+                    <div>
+                        <div>{'{"name":"row2"}'}</div>
+                        <div>1</div>
+                        <div>null</div>
+                    </div>
+                    <div>
+                        <div>{'{"name":"row3"}'}</div>
+                        <div>2</div>
+                        <div>null</div>
+                    </div>
                     <div>
                         <div>{'{"name":"row4"}'}</div>
                         <div>3</div>
@@ -355,16 +371,6 @@ describe('ReactSmartScroll', () => {
                     <div>
                         <div>{'{"name":"row9"}'}</div>
                         <div>8</div>
-                        <div>null</div>
-                    </div>
-                    <div>
-                        <div>{'{"name":"row10"}'}</div>
-                        <div>9</div>
-                        <div>null</div>
-                    </div>
-                    <div>
-                        <div>{'{"name":"row11"}'}</div>
-                        <div>10</div>
                         <div>null</div>
                     </div>
                 </div>
